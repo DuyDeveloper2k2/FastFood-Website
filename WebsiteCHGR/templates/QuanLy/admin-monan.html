@@ -1,0 +1,481 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="">
+  
+    <title> Cửa Hàng Gà Rán </title>
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/admin_style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>QUẢN LÝ</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">{{ request.session.user_name }}</h6>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'Admin' %}" class="nav-item nav-link"><i class="fa fa-tachometer me-2"></i>Trang chủ</a>
+                    <a href="{% url 'AdminMonan' %}" class="nav-item nav-link active"><i class="fa fa-tasks me-2"></i>Món ăn</a>
+                    <a href="{% url 'AdminCombo' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Combo</a>
+                    <a href="{% url 'AdminTinhtrang' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Đơn hàng</a>
+                    <a href="{% url 'AdminNguyenlieu' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Nguyên liệu</a>
+                    <a href="{% url 'AdminKhuyenmai' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Khuyến mãi</a>
+                </div>
+                <div class="w-100 text-center mt-4">
+                    <a href="{% url 'AdminLogout' %}" class="btn btn-danger"><i class="fa fa-sign-out me-2"></i>Đăng xuất</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            <img class="rounded-circle me-lg-2" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">{{ request.session.user_name }}</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- Main content start -->
+            <div class="container-fluid pt-4 px-4">
+              <div class="row g-4">
+                <div class="col-12">
+                  <div class="bg-light rounded h-100 p-4">
+                    <!-- Lọc danh sách -->
+                    <div class="row mb-5">
+                      <div class="col-md-3">
+                          <form method="GET" action="{% url 'AdminMonan' %}">
+                              <div class="input-group">
+                                  <select class="form-select" name="loaimon">
+                                      <option value="">Tất cả loại món ăn</option>
+                                      {% for loaimon in Loaimons %}
+                                      <option value="{{ loaimon.maloai }}" {% if loaimon.maloai == loaimon_selected %}selected{% endif %}>{{ loaimon.tenloai }}</option>
+                                      {% endfor %}
+                                  </select>
+                                  <button class="btn btn-primary" type="submit">Lọc</button>
+                              </div>
+                          </form>
+                      </div>
+                      <div class="col-md-9 d-flex justify-content-end">
+                        <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#ModalThemMonan">Thêm món ăn</button>
+                      </div>
+                    </div>
+                    <!-- Lọc danh sách -->
+
+                    <!-- Modal thêm món ăn -->
+                    <div class="modal fade" id="ModalThemMonan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Thêm món ăn</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="ThemMonan" method="POST" enctype="multipart/form-data" action="{% url 'AdminMonan' %}">
+                                {% csrf_token %}
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                    <label for="id_maloai">Loại món ăn</label>
+                                    <div class="input-group">
+                                        <select class="form-control" id="id_maloai" name="maloai">
+                                        {% for loaimon in Loaimons %}
+                                        <option value="{{ loaimon.maloai }}">{{ loaimon.tenloai }}</option>
+                                        {% endfor %}
+                                        </select>
+                                        <div class="input-group-append">
+                                        <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#ModalThemLoaiMonan">+</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                    <label for="id_tenmonan">Tên món ăn</label>
+                                    <input type="text" class="form-control" id="id_tenmonan" name="tenmonan">
+                                    </div>
+                                </div>
+                                <hr />
+                                {% for kichco in Kichcos %}
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                    <input class="form-check-input" type="checkbox" id="kichco_{{ kichco.makichco }}" name="makichco" value="{{ kichco.makichco }}" onclick="togglePriceInput(this)" data-group="kichco">
+                                    <label class="form-check-label" for="kichco_{{ kichco.makichco }}">
+                                        {{ kichco.tenkichco }}
+                                    </label>
+                                    <input type="number" name="kichco_price_{{ kichco.makichco }}" id="kichco_price_{{ kichco.makichco }}" class="form-control" placeholder="Enter price" style="display: none;">
+                                    </div>
+                                </div>
+                                <hr />
+                                {% endfor %}
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                    <label for="id_mota">Mô tả</label>
+                                    <textarea class="form-control" id="id_mota" name="mota"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                    <label for="id_anhmonan">Ảnh món ăn</label>
+                                    <input type="file" class="form-control" id="id_anhmonan" name="MonanImage">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
+                                    <button class="btn btn-success" type="submit">Thêm</button>
+                                </div>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- Modal thêm món ăn -->
+                     
+                    <!-- Modal sửa món ăn -->
+                    <div class="modal fade" id="ModalEditMonan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Cập nhật món ăn</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <form id="EditMonan" method="POST" enctype="multipart/form-data" action="{% url 'AdminEditMonan' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" id="edit_id">
+                                            <div class="row mb-2">
+                                                <div class="col-md-6">
+                                                    <label for="id_maloai">Loại món ăn</label>
+                                                    <div class="input-group">
+                                                        <select class="form-control" id="id_maloai" name="maloai">
+                                                        {% for loaimon in Loaimons %}
+                                                            <option value="{{ loaimon.maloai }}">{{ loaimon.tenloai }}</option>
+                                                        {% endfor %}
+                                                        </select>
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#ModalThemLoaiMonan">+</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <div class="row mb-2">
+                                                <div class="col-md-6">
+                                                    <label for="id_tenmonan">Tên món ăn</label>
+                                                    <input type="text" class="form-control" id="id_tenmonan" name="tenmonan">
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            {% for kichco in Kichcos %}
+                                            <div class="row mb-2">
+                                                <div class="col-md-12">
+                                                    <input class="form-check-input" type="checkbox" id="kichco_{{ kichco.makichco }}" name="makichco" value="{{ kichco.makichco }}" onclick="togglePriceInput(this)" data-group="kichco">
+                                                    <label class="form-check-label" for="kichco_{{ kichco.makichco }}">
+                                                        {{ kichco.tenkichco }}
+                                                    </label>
+                                                    <input type="number" name="kichco_price_{{ kichco.makichco }}" id="kichco_price_{{ kichco.makichco }}" class="form-control" placeholder="Enter price" style="display: none;">
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            {% endfor %}
+                                            <div class="row mb-2">
+                                                <div class="col-md-12">
+                                                    <label for="id_mota">Mô tả</label>
+                                                    <textarea class="form-control" id="id_mota" name="mota"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-12">
+                                                    <label for="id_anhmonan">Ảnh món ăn</label>
+                                                    <input type="file" class="form-control" id="id_anhmonan" name="MonanImage">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
+                                                <button class="btn btn-success" type="submit">Cập nhật</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal sửa món ăn -->                    
+
+                    <!-- Modal thêm loại món ăn -->
+                    <div class="modal fade" id="ModalThemLoaiMonan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" >
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="newLoaiComboModalLabel">Thêm loại món ăn mới</h5>
+                                <button type="button" id="closeLMButton" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="ThemLoaiCombo" method="POST" enctype="multipart/form-data" action="{% url 'AdminLoaiMonan' %}">
+                                    {% csrf_token %}
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <label for="id_tenloaimonan">Tên loại món ăn</label>
+                                            <input type="text" class="form-control" id="newLoaiMonanInput" name="tenloaimonan" placeholder="Điền tên loại mới">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button class="btn btn-success" id="addLMButton">Thêm</button>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Modal thêm loại món ăn -->
+
+                    <!-- Danh sách món ăn -->
+                    <h4 class="mb-5 text-center">Danh sách món ăn</h4>
+                    <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th scope="col"></th>
+                                    <th scope="col">Loại món ăn</th>
+                                    <th scope="col">Món ăn</th>
+                                    <th scope="col" colspan="2">Mô tả</th>
+                                    <th scope="col">Giá</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              {% for monan in Monans %}
+                                <tr>
+                                  {% if monan.anhmonan %}
+                                    <th scope="row">
+                                      <img src="data:image/jpeg;base64,{{ monan.anhmonan }}" alt="{{ monan.tenmonan }}" width="50px" height="auto">
+                                    </th>
+                                  {% endif %}
+                                    <td>{{ monan.loaimon }}</td>
+                                    <td>{{ monan.tenmonan }}</td>
+                                    <td colspan="2">{{ monan.mota }}</td>
+                                    <td>{{ monan.gia }}</td>
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Danh sách món ăn -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Main content end -->
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+              <div class="bg-light rounded-top p-4">
+                  <div class="row">
+                      <div class="col-12 col-sm-6 text-center text-sm-start">
+                          &copy; <a href="#">Cửa Hàng Gà Rán</a>, All Right Reserved. 
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- modal messages -->
+        {% if messages %}
+        <div id="messageModal" class="modal fade" tabindex="0" aria-labelledby="messageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-center">
+                        <h5 class="modal-title text-center" id="messageModalLabel">Thông báo</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <!-- modal messages -->
+    </div>
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.js"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/admin_custom.js' %}"></script>
+  <!-- Admin js -->
+  <script>
+    function togglePriceInput(checkbox) {
+        var priceInput = document.getElementById('kichco_price_' + checkbox.value);
+        priceInput.style.display = checkbox.checked ? 'block' : 'none';
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const editButtons = document.querySelectorAll('.edit-monan');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const monanId = this.dataset.id;
+                console.log(monanId)                
+                fetch(`${monanId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('edit_id').value = data.id;
+                        document.getElementById('id_tenmonan').value = data.tenmonan;
+                        document.getElementById('id_maloai').value = data.maloai;
+                        document.getElementById('id_mota').value = data.mota;
+                        
+                        data.kichcos.forEach(kichco => {
+                            const checkbox = document.getElementById('kichco_' + kichco.id);
+                            const priceInput = document.getElementById('kichco_price_' + kichco.id);
+                            checkbox.checked = true;
+                            priceInput.style.display = 'block';
+                            priceInput.value = kichco.price;
+                        });
+                    });
+            });
+        });
+    });
+  </script>
+
+  <script>
+    function togglePriceInput(checkbox) {
+        var priceInput = document.getElementById('kichco_price_' + checkbox.value);
+        if (checkbox.checked) {
+            priceInput.style.display = 'block';
+        } else {
+            priceInput.style.display = 'none';
+            priceInput.value = '';  // Clear the input when it's hidden
+        }
+    }
+  </script>
+    
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('addLMButton').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            var form = document.getElementById('ThemLoaiCombo');
+            var formData = new FormData(form);
+
+            fetch("{% url 'AdminLoaiMonan' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Close the "Thêm loại món ăn" modal
+                    var modalLoaiMonanElement = document.getElementById('ModalThemLoaiMonan');
+                    var modalLoaiMonan = bootstrap.Modal.getInstance(modalLoaiMonanElement);
+                    modalLoaiMonan.hide();
+
+                    // Update the dropdown in the "Thêm món ăn" modal
+                    var maloaiSelect = document.getElementById('id_maloai');
+                    var newOption = document.createElement('option');
+                    newOption.value = data.maloai;
+                    newOption.text = data.tenloai;
+                    maloaiSelect.add(newOption);
+
+                    // Reopen the "Thêm món ăn" modal
+                    var modalMonanElement = document.getElementById('ModalThemMonan');
+                    var modalMonan = new bootstrap.Modal(modalMonanElement);
+                    modalMonan.show();
+                } else {
+                    // Handle errors
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+
+    document.getElementById('addMonanButton').addEventListener('click', function() {
+        document.getElementById('ThemMonan').submit();
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        if (messageModal) {
+            messageModal.show();
+        }
+    });
+  </script>
+</body>
+
+</html>

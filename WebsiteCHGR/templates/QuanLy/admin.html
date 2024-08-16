@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="">
+  
+    <title> Cửa Hàng Gà Rán </title>
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/admin_style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>QUẢN LÝ</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">{{ request.session.user_name }}</h6>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'Admin' %}" class="nav-item nav-link active"><i class="fa fa-tachometer me-2"></i>Trang chủ</a>
+                    <a href="{% url 'AdminMonan' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Món ăn</a>
+                    <a href="{% url 'AdminCombo' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Combo</a>
+                    <a href="{% url 'AdminTinhtrang' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Đơn hàng</a>
+                    <a href="{% url 'AdminNguyenlieu' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Nguyên liệu</a>
+                    <a href="{% url 'AdminKhuyenmai' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Khuyến mãi</a>
+                </div>
+                <div class="w-100 text-center mt-4">
+                    <a href="{% url 'AdminLogout' %}" class="btn btn-danger"><i class="fa fa-sign-out me-2"></i>Đăng xuất</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img class="rounded-circle me-lg-2" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">{{ request.session.user_name }}</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>            
+            <!-- Navbar End -->
+
+            <!-- Thống kê Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-8 col-xl-4">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-cutlery fa-3x text-primary ml-5"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Tổng món ăn</p>
+                                <h4 class="mb-0">{{MonanTotal}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-xl-4">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-cubes fa-3x text-primary ml-5"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Tổng combo</p>
+                                <h4 class="mb-0">{{ComboTotal}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-xl-4">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-tags fa-3x text-primary ml-5"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Khuyến mãi hiện có</p>
+                                <h4 class="mb-0">{{KhuyenmaiTotal}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Thống kê End -->
+
+            <!-- Danh sách nhân viên Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Danh sách nhân viên</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                                <tr class="text-dark">
+                                    <th scope="col">Họ tên nhân viên</th>
+                                    <th scope="col">Giới tính</th>
+                                    <th scope="col">Số điện thoại</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col" colspan="2">Địa chỉ</th>
+                                    <th scope="col">Chức vụ</th>
+                                    <th scope="col">Bộ phận</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for nhanvien in Nhanviens %}
+                                <tr>
+                                    <td scope="col">{{ nhanvien.tennhanvien }}</td>
+                                    <td scope="col">{{ nhanvien.gioitinh }}</td>
+                                    <td scope="col">{{ nhanvien.sdt }}</td>
+                                    <td scope="col">{{ nhanvien.email }}</td>
+                                    <td scope="col" colspan="2">{{ nhanvien.diachi }}</td>
+                                    <td scope="col">{{ nhanvien.chucvu }}</td>
+                                    <td scope="col">{{ nhanvien.bophan }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Danh sách nhân viên End -->
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+              <div class="bg-light rounded-top p-4">
+                  <div class="row">
+                      <div class="col-12 col-sm-6 text-center text-sm-start">
+                          &copy; <a href="#">Cửa Hàng Gà Rán</a>, All Right Reserved. 
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+    </div>
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.js"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/admin_custom.js' %}"></script>
+</body>
+
+</html>

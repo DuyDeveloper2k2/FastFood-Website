@@ -1,0 +1,249 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="">
+  
+    <title> Cửa Hàng Gà Rán </title>
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+</head>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="{% static 'images/bg-header.jpg' %}" alt="">
+    </div>
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{% url 'Home' %}">
+            <span>
+              Cửa Hàng Gà Rán
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Home' %}">TRANG CHỦ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Menu' %}">THỰC ĐƠN</a>
+              </li>
+            </ul>
+            <div class="user_option mx-auto">
+              {% if request.session.khachhang_id %}
+                <a href="{% url 'Profile' %}" class="user_link">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  {{ request.session.khachhang_name }}
+                </a>
+              {% else %}
+                <a href="{% url 'Login' %}" class="user_link">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                </a>
+              {% endif %}
+
+              {% if request.session.total_quantity %}
+              <a href="{% url 'Shoppingcart' %}">
+                <i class="fa fa-shopping-cart fa-md" style="color: white"></i>
+                <span class="badge rounded-pill badge-notification bg-danger">{{ request.session.total_quantity }}</span>
+              </a>
+              {% else %}
+              <a href="{% url 'Shoppingcart' %}">
+                <i class="fa fa-shopping-cart fa-md" style="color: white"></i>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <!-- detail section -->
+  <section class="py-5">
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+              <h4 class="mb-4">Danh sách hóa đơn</h4>
+              <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
+                  <table class="table table-dark table-hover">
+                      <thead>
+                          <tr>
+                              <th scope="col">Mã hóa đơn</th>
+                              <th scope="col" colspan="3">Thông tin hóa đơn</th>
+                              <th scope="col">Ngày lập</th>
+                              <th scope="col">Tổng tiền</th>
+                              <th scope="col">Trạng thái</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for hoadon in HoadonDetails %}
+                          <tr>
+                            <td scope="row">#{{hoadon.mahd}}</td>
+                            <td colspan="3">
+                              <ul>
+                              {% for item in hoadon.all %}
+                                {% if item.type == 'Monan' %}
+                                  <li>{{item.ten}}</li>
+                                {% elif item.type == 'Combo' %}
+                                  <li>{{item.ten}}</li>
+                                  <li>
+                                    <ul>
+                                      {% for monan in item.thongtin %}
+                                        <li>{{monan.tenmon}} ({{monan.kichco}}) - SL: {{monan.soluong}}</li>
+                                      {% endfor %}
+                                    </ul>
+                                  </li>
+                                {% endif %}
+                              {% endfor %}
+                              </ul>
+                            </td>
+                            <td>{{hoadon.ngaylap|date:"d/m/Y"}}</td>
+                            <td>{{hoadon.tongtien}}</td>
+                            <td>{{hoadon.trangthai}}</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+  <!-- end detail section -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 footer-col">
+          <div class="footer_contact">
+            <h4>
+              Liên hệ
+            </h4>
+            <div class="contact_link_box">
+              <a href="">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <span>
+                  140 Lê Trọng Tấn, Phường Tây Thạnh, Quận Tân Phú, TP.HCM
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span>
+                  Call +01 1234567890
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>
+                  demo@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <div class="footer_detail">
+            <a href="" class="footer-logo">
+              Cửa Hàng Gà Rán
+            </a>
+            <p>
+              Cửa Hàng Gà Rán, thức ăn nhanh tại Việt Nam 
+            </p>
+            <div class="footer_social">
+              <a href="">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-pinterest" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <h4>
+            Giờ mở cửa
+          </h4>
+          <p>
+            Mỗi Ngày
+          </p>
+          <p>
+            7:00 - 22:00
+          </p>
+        </div>
+      </div>
+      <div class="footer-info">
+        <p>
+          &copy; <span id="displayYear"></span> All Rights Reserved By<br><br>
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.js"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+
+</html>

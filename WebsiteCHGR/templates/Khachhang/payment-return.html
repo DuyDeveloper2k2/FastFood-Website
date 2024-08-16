@@ -1,0 +1,359 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="">
+  
+    <title> Cửa Hàng Gà Rán </title>
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+</head>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="{% static 'images/bg-header.jpg' %}" alt="">
+    </div>
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{% url 'Home' %}">
+            <span>
+              Cửa Hàng Gà Rán
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Home' %}">TRANG CHỦ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Menu' %}">THỰC ĐƠN</a>
+              </li>
+            </ul>
+            <div class="user_option mx-auto">
+              {% if request.session.khachhang_id %}
+                <a href="{% url 'Profile' %}" class="user_link">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  {{ request.session.khachhang_name }}
+                </a>
+              {% else %}
+                <a href="{% url 'Login' %}" class="user_link">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                </a>
+              {% endif %}
+
+              {% if request.session.total_quantity %}
+              <a href="{% url 'Shoppingcart' %}">
+                <i class="fa fa-shopping-cart fa-md" style="color: white"></i>
+                <span class="badge rounded-pill badge-notification bg-danger">{{ request.session.total_quantity }}</span>
+              </a>
+              {% else %}
+              <a href="{% url 'Shoppingcart' %}">
+                <i class="fa fa-shopping-cart fa-md" style="color: white"></i>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <!-- cart section -->
+  <div class="container mt-5 mb-5">
+      <div class="checkout-success-content py-2">
+          <!--Order Card-->
+          <div class="row">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                  <div class="checkout-scard card border-0 rounded">
+                      <div class="card-body text-center">
+                          <p class="card-icon"><i class="fa fa-check-circle fa-5x" style="color: green"></i></p>
+                          <h1 class="card-title display-1">Đặt hàng thành công!</h1>
+                          <hr />
+                          <br />
+                          <br />
+                          <br />
+                          <br />
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!--End Order Card-->
+
+<!--
+          <div class="row mt-5">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                  <div class="checkout-item-ordered">
+                      <h4 class="fs-6 mb-3">Order Summary</h2>
+                      <div class="table-content table-responsive order-table mb-4">
+                          <table class="table table-bordered align-middle table-hover text-center mb-0">
+                              <thead>
+                                  <tr>
+                                      <th class="fw-bold">Image</th>
+                                      <th class="text-start fw-600">Product Name</th>
+                                      <th class="fw-600">Price</th>
+                                      <th class="fw-600">Qty</th>
+                                      <th class="fw-600">Subtotal</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td class="pro-img"><a href="https://lizotel.pt/optimal-html/product-layout1.html"><img class="primary blur-up lazyloaded" src="./Checkout Success - Optimal Multipurpose eCommerce Bootstrap 5 Html Template_files/100x120.jpg" alt="image" title="product" width="80"></a></td>
+                                      <td class="pro-name text-start">
+                                          <a href="https://lizotel.pt/optimal-html/product-layout1.html" class="d-block">Sunset Sleep Scarf Top</a>
+                                          <div class="cart__meta-text">
+                                              Color: Black<br>Size: Small<br>
+                                          </div>
+                                      </td>
+                                      <td class="pro-price">$99.00</td>
+                                      <td class="pro-qty">1</td>
+                                      <td class="pro-total fw-500">$99.00</td>
+                                  </tr>
+                                  <tr>
+                                      <td class="pro-img"><a href="https://lizotel.pt/optimal-html/product-layout1.html"><img class="primary blur-up lazyloaded" src="./Checkout Success - Optimal Multipurpose eCommerce Bootstrap 5 Html Template_files/100x120.jpg" alt="image" title="product" width="80"></a></td>
+                                      <td class="pro-name text-start">
+                                          <a href="https://lizotel.pt/optimal-html/product-layout1.html" class="d-block">Long Sleeve T-shirts</a>
+                                          <div class="cart__meta-text">
+                                              Color: Gray<br>Size: 28<br>
+                                          </div>
+                                      </td>
+                                      <td class="pro-price">$128.00</td>
+                                      <td class="pro-qty">2</td>
+                                      <td class="pro-total fw-500">$256.00</td>
+                                  </tr>
+                                  <tr>
+                                      <td class="pro-img"><a href="https://lizotel.pt/optimal-html/product-layout1.html"><img class="primary blur-up lazyloaded" src="./Checkout Success - Optimal Multipurpose eCommerce Bootstrap 5 Html Template_files/100x120.jpg" alt="image" title="product" width="80"></a></td>
+                                      <td class="pro-name text-start">
+                                          <a href="https://lizotel.pt/optimal-html/product-layout1.html" class="d-block">Weave Hoodie Sweatshirt</a>
+                                          <div class="cart__meta-text">
+                                              Color: Navy<br>Size: Large<br>
+                                          </div>
+                                      </td>
+                                      <td class="pro-price">$150.00</td>
+                                      <td class="pro-qty">3</td>
+                                      <td class="pro-total fw-500">$450.00</td>
+                                  </tr>
+                              </tbody>
+                              <tfoot>
+                                  <tr>
+                                      <td colspan="4" class="item subtotal text-end fw-bolder">Subtotal:</td>
+                                      <td class="fw-500 last">$59.00</td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="4" class="item tax text-end fw-bolder">Tax:</td>
+                                      <td class="fw-500 last">$4.87</td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="4" class="item discount text-end fw-bolder">Discount:</td>
+                                      <td class="fw-500 last">$0.00</td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="4" class="item shipping text-end fw-bolder">Shipping:</td>
+                                      <td class="fw-500 last">$5.00</td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="4" class="item total text-end fw-bolder">Grand Total:</td>
+                                      <td class="fw-500 last">$68.87</td>
+                                  </tr>
+                              </tfoot>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                  <div class="ship-info-details shipping-method-details">
+                      <div class="row g-0">
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <div class="shipping-details mb-4 mb-sm-0 clearfix">
+                                  <h3>Shipping Address</h3>
+                                  <p>No 40 Gallaxy Enque Street 133/2,</p>
+                                  <p>New York,</p>
+                                  <p>USA</p>
+                                  <p>00004-1988</p>
+                              </div>
+                          </div>
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <div class="billing-details clearfix">
+                                  <h3>Billing Address</h3>
+                                  <p>No 40 Gallaxy Enque Street 133/2,</p>
+                                  <p>New York,</p>
+                                  <p>USA</p>
+                                  <p>00004-1988</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="ship-info-details billing-payment-details">
+                      <div class="row g-0">
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <div class="shipping-details mb-4 mb-sm-0 clearfix">
+                                  <h3>Shipping Method</h3>
+                                  <p>Flat Rate - Fixeds</p>
+                                  <p>Delivery Date: N/A</p>
+                              </div>
+                          </div>
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <div class="billing-details clearfix">
+                                  <h3>Payment Method</h3>
+                                  <p>Check / Money order</p>
+                                  <p>Cash on delivery</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="d-flex-wrap w-100 mt-4 text-center">
+                      <a href="https://lizotel.pt/optimal-html/index.html" class="d-inline-flex align-items-center btn btn-outline-primary rounded me-2 mb-2 me-sm-3"><i class="me-2 icon an an-angle-left-r"></i>Continue Shopping</a>
+                      <button type="button" class="d-inline-flex align-items-center btn rounded me-2 mb-2 me-sm-3"><i class="me-2 icon an an-print"></i>Print Order</button>
+                      <button type="button" class="d-inline-flex align-items-center btn rounded me-2 mb-2 me-sm-3"><i class="me-2 icon an an-sync-ar"></i>Re-Order</button>
+                  </div>
+              </div>
+          </div>
+-->
+      </div>
+  </div>
+  <!-- end cart section -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 footer-col">
+          <div class="footer_contact">
+            <h4>
+              Liên hệ
+            </h4>
+            <div class="contact_link_box">
+              <a href="">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <span>
+                  140 Lê Trọng Tấn, Phường Tây Thạnh, Quận Tân Phú, TP.HCM
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span>
+                  Call +01 1234567890
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>
+                  demo@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <div class="footer_detail">
+            <a href="" class="footer-logo">
+              Cửa Hàng Gà Rán
+            </a>
+            <p>
+              Cửa Hàng Gà Rán, thức ăn nhanh tại Việt Nam 
+            </p>
+            <div class="footer_social">
+              <a href="">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-pinterest" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <h4>
+            Giờ mở cửa
+          </h4>
+          <p>
+            Mỗi Ngày
+          </p>
+          <p>
+            7:00 - 22:00
+          </p>
+        </div>
+      </div>
+      <div class="footer-info">
+        <p>
+          &copy; <span id="displayYear"></span> All Rights Reserved By<br><br>
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <style>
+    .custom-table,
+    .custom-table th,
+    .custom-table td {
+      border: none !important;
+    }
+  </style>
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <!-- MDB js -->
+  <script src="{% static 'js/mdb.es.min.js' %}"></script>
+  <script src="{% static 'js/mdb.umd.min.js' %}"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+
+</html>

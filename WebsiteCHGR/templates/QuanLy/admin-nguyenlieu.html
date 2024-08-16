@@ -1,0 +1,350 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="">
+  
+    <title> Cửa Hàng Gà Rán </title>
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/admin_style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>QUẢN LÝ</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">{{ request.session.user_name }}</h6>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'Admin' %}" class="nav-item nav-link"><i class="fa fa-tachometer me-2"></i>Trang chủ</a>
+                    <a href="{% url 'AdminMonan' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Món ăn</a>
+                    <a href="{% url 'AdminCombo' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Combo</a>
+                    <a href="{% url 'AdminTinhtrang' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Đơn hàng</a>
+                    <a href="{% url 'AdminNguyenlieu' %}" class="nav-item nav-link active"><i class="fa fa-tasks me-2"></i>Nguyên liệu</a>
+                    <a href="{% url 'AdminKhuyenmai' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Khuyến mãi</a>
+                </div>
+                <div class="w-100 text-center mt-4">
+                    <a href="{% url 'AdminLogout' %}" class="btn btn-danger"><i class="fa fa-sign-out me-2"></i>Đăng xuất</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            <img class="rounded-circle me-lg-2" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">{{ request.session.user_name }}</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- Main content start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="bg-light rounded h-10 p-4">
+                            <!-- Lọc danh sách -->
+                            <div class="row mb-5">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-9 d-flex justify-content-end">
+                                <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#ModalTaophieunhap">Tạo phiếu nhập</button>
+                                <button class="btn btn-primary ms-2" type="button" data-bs-toggle="modal" data-bs-target="#ModalLichsu">Lịch sử</button>
+                            </div>
+                            </div>
+                            <!-- Lọc danh sách -->
+
+                            <!-- Modal tạo phiếu nhập -->
+                            <div class="modal fade" id="ModalTaophieunhap" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" >
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Tạo phiếu nhập</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <form id="Taophieunhap" method="POST" action="{% url 'AdminNguyenlieu' %}">
+                                                {% csrf_token %}
+                                                <div class="row mb-5">
+                                                    <div class="col-md-4">
+                                                        <label for="id_maphieu">Mã phiếu nhập</label>
+                                                        <input type="text" class="form-control" id="id_maphieu" name="maphieu" value="{{ Maphieunhap }}" readonly>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="id_nhanvien">Tên nhân viên</label>
+                                                        <input type="text" class="form-control" id="id_nhanvien" name="nhanvien" value="{{ Nhanvien }}" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-5">
+                                                    <div class="col-md-4">
+                                                        <label for="ngaynhap">Ngày nhập</label>
+                                                        <input type="date" class="form-control" id="ngaynhap" name="ngaynhap" value="" readonly>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <h4 class="mb-2"> Danh sách các nguyên liệu</h4>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 table-container">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr class="text-center">
+                                                                        <th scope="col"></th>
+                                                                        <th scope="col"  colspan="2">Tên nguyên liệu</th>
+                                                                        <th scope="col">Số lượng</th>
+                                                                        <th scope="col">Đơn vị</th>
+                                                                        <th scope="col">Giá nhập</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% for nguyenlieu in Nguyenlieus %}
+                                                                        <tr>
+                                                                            <td><input type="checkbox" name="nguyenlieu[]" value="{{ nguyenlieu.manguyenlieu }}"></td>
+                                                                            <td colspan="2">{{ nguyenlieu.tennguyenlieu }}</td>
+                                                                            <td>
+                                                                                <input type="number" class="form-control-sm" name="{{ nguyenlieu.manguyenlieu }}_SL" min="1" value="1">
+                                                                            </td>
+                                                                            <td>{{ nguyenlieu.donvi }}</td>
+                                                                            <td>
+                                                                                <input type="number" class="form-control" name="{{ nguyenlieu.manguyenlieu }}_Giaban" min="1" value="0">
+                                                                            </td>
+                                                                        </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                    </div>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
+                                            <button type="submit" class="btn btn-success" id="taoPhieu">Tạo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal tạo phiếu nhập -->
+
+                            <!-- Modal lịch sử -->
+                            <div class="modal fade" id="ModalLichsu" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Lịch sử nhập hàng</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">                                   
+                                        <div class="table-responsive" style="max-height: 420px; overflow-y: auto;">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr class="text-center">
+                                                        <th scope="col">Mã phiếu</th>
+                                                        <th scope="col" colspan="2">Tên nguyên liệu</th>
+                                                        <th scope="col">Số lượng</th>
+                                                        <th scope="col">Giá nhập</th>
+                                                        <th scope="col">Ngày nhập</th>
+                                                        <th scope="col">Nhân viên nhập</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for item in Lichsus %}
+                                                    <tr>
+                                                        <td>{{ item.maphieunhap }}</td>
+                                                        <td>
+                                                            <ul class="list-unstyled">
+                                                                {% for nguyenlieu in item.thongtin %}
+                                                                    <li>{{ nguyenlieu.tennguyenlieu }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </td>
+                                                        <td>
+                                                            <ul class="list-unstyled">
+                                                                {% for nguyenlieu in item.thongtin %}
+                                                                    <li>{{ nguyenlieu.donvi }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <ul class="list-unstyled">
+                                                                {% for nguyenlieu in item.thongtin %}
+                                                                    <li>{{ nguyenlieu.soluong }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </td>                                                            <td>
+                                                            <ul class="list-unstyled">
+                                                                {% for nguyenlieu in item.thongtin %}
+                                                                    <li>{{ nguyenlieu.gianhap }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </td>
+                                                        <td>{{ item.ngaynhap|date:'d/m/Y' }}</td>
+                                                        <td>{{ item.nhanvien }}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <!-- Modal lịch sử -->
+
+                            <!-- Danh sách phiếu nhập -->
+                            <h4 class="m-5 text-center"> Danh sách các nguyên liệu</h4>
+                            <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" colspan="2">Tên nguyên liệu</th>
+                                        <th scope="col">Số lượng tồn kho</th>
+                                        <th scope="col">Đơn vị tính</th>
+                                        <th scope="col">Nhà cung cấp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in Nguyenlieus %}
+                                    <tr>
+                                        <td colspan="2">{{ item.tennguyenlieu }}</td>
+                                        <td>{{ item.soluongtonkho}}</td>
+                                        <td>{{ item.donvi }}</td>
+                                        <td>{{ item.nhacungcap }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            </div>
+                            <!-- Danh sách cttt -->
+                        </div>      
+                    </div>
+                </div>
+            </div>
+            <!-- Main content end -->
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">Cửa Hàng Gà Rán</a>, All Right Reserved. 
+                        </div>
+                    </div>
+                </div>
+              </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- modal messages -->
+        {% if messages %}
+        <div id="messageModal" class="modal fade" tabindex="0" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title text-center" id="messageModalLabel">Thông báo</h5>
+                </div>
+                <div class="modal-body text-center">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+        {% endif %}
+        <!-- modal messages -->        
+    </div>
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.js"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/admin_custom.js' %}"></script> 
+  <!-- Admin js --> 
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('ngaynhap').value = today;
+    });
+
+    document.getElementById('taoPhieu').addEventListener('click', function() {
+        document.getElementById('Taophieunhap').submit();
+    });
+  </script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        if (messageModal) {
+            messageModal.show();
+        }
+    });
+  </script>
+
+</body>
+
+</html>

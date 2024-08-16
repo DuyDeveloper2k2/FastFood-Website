@@ -1,0 +1,322 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="">
+  
+    <title> Cửa Hàng Gà Rán </title>
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/admin_style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>QUẢN LÝ</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">{{ request.session.user_name }}</h6>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'Admin' %}" class="nav-item nav-link"><i class="fa fa-tachometer me-2"></i>Trang chủ</a>
+                    <a href="{% url 'AdminMonan' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Món ăn</a>
+                    <a href="{% url 'AdminCombo' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Combo</a>
+                    <a href="{% url 'AdminTinhtrang' %}" class="nav-item nav-link active"><i class="fa fa-tasks me-2"></i>Đơn hàng</a>
+                    <a href="{% url 'AdminNguyenlieu' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Nguyên liệu</a>
+                    <a href="{% url 'AdminKhuyenmai' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Khuyến mãi</a>
+                </div>
+                <div class="w-100 text-center mt-4">
+                    <a href="{% url 'AdminLogout' %}" class="btn btn-danger"><i class="fa fa-sign-out me-2"></i>Đăng xuất</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            <img class="rounded-circle me-lg-2" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">{{ request.session.user_name }}</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- Main content start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                  <div class="col-12">
+                    <div class="bg-light rounded h-10 p-4">
+                      <!-- Lọc danh sách -->
+                      <div class="row mb-5">
+                        <div class="col-md-4">
+                            <form method="GET" action="{% url 'AdminTinhtrang' %}">
+                                <div class="input-group">
+                                    <select class="form-select" name="tinhtrang">
+                                        <option value="">Tất cả loại món ăn</option>
+                                        {% for loaitt in Tinhtrangs %}
+                                        <option value="{{ loaitt.matinhtrang }}" {% if loaitt.matinhtrang == tinhtrang_selected %}selected{% endif %}>{{ loaitt.tentinhtrang }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button class="btn btn-primary" type="submit">Lọc</button>
+                                </div>
+                            </form>
+                            
+                        </div>
+                      </div>
+                      <!-- Lọc danh sách -->
+
+                      <!-- Modal cập nhật chi tiết tình trạng -->
+                      <div class="modal fade" id="ModalEditCTTT" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Cập nhật thông tin</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form id="edit-cttt-form" method="post" action="{% url 'AdminTinhtrang' %}">
+                                    {% csrf_token %}    
+                                <div class="modal-body">
+                                    <div class="container-fluid">                                    
+                                        <div class="row mb-5">
+                                            <div class="col-md-4">
+                                                <label for="edit-cttt-mahoadon" class="form-label">Mã hóa đơn</label>
+                                                <input type="text" class="form-control" id="edit-cttt-mahoadon" name="mahoadon" readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="edit-cttt-nhanvien" class="form-label">Nhân viên</label>
+                                                <input type="text" class="form-control" id="edit-cttt-nhanvien" name="nhanvien" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-5">
+                                            <div class="col-md-6">
+                                                <label for="edit-cttt-tinhtrang" class="form-label">Tình trạng</label>
+                                                <select class="form-select" id="edit-cttt-tinhtrang" name="tinhtrang">
+                                                    {% for loaitt in Tinhtrangs %}
+                                                    <option value="{{ loaitt.matinhtrang }}">{{ loaitt.tentinhtrang }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-5">
+                                            <div class="col-md-4">
+                                                <label for="edit-cttt-tgxacnhan" class="form-label">Thời gian xác nhận</label>
+                                                <input type="date" class="form-control" id="edit-cttt-tgxacnhan" name="tgxacnhan">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="edit-cttt-tgthanhtoan" class="form-label">Thời gian thanh toán</label>
+                                                <input type="date" class="form-control" id="edit-cttt-tgthanhtoan" name="tgthanhtoan">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="edit-cttt-tgnhanhang" class="form-label">Thời gian nhận hàng</label>
+                                                <input type="date" class="form-control" id="edit-cttt-tgnhanhang" name="tgnhanhang">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
+                                    <button type="submit" class="btn btn-primary" form="edit-cttt-form">Xác Nhận</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                      </div>
+                      <!-- Modal cập nhật chi tiết tình trạng -->
+
+                      <!-- Danh sách cttt -->
+                      <h4 class="m-5 text-center"> Danh sách tình trạng các hóa đơn</h4>
+                      <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th scope="col">Mã hóa đơn</th>
+                                    <th scope="col">Tình trạng</th>
+                                    <th scope="col">Nhân viên</th>
+                                    <th scope="col">Thời gian thanh toán</th>
+                                    <th scope="col">Thời gian xác nhận</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in Chitiettinhtrangs %}
+                                <tr>
+                                    <td>#{{ item.mahoadon }}</td>
+                                    <td>{{ item.tinhtrang }}</td>
+                                    <td>{{ item.nhanvien }}</td>
+                                    <td>{{ item.thoigianthanhtoan|date:'d/m/Y' }}</td>
+                                    <td>{{ item.thoigianxacnhan|date:'d/m/Y' }}</td>
+                                    <td>
+                                        <!-- Edit icon -->
+                                        <a href="#" class="edit-cttt" data-bs-toggle="modal" data-bs-target="#ModalEditCTTT" data-item-id="{{ item.mahoadon }}" data-tinhtrang="{{ item.tinhtrang }}" 
+                                        data-nhanvien="{{ item.nhanvien }}" data-tgxacnhan="{{ item.thoigianxacnhan }}"
+                                        data-tgthanhtoan="{{ item.thoigianthanhtoan }}" data-tgnhanhang="{{ item.thoigiannhanhang }}">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                      </div>
+                      <!-- Danh sách cttt -->
+                    </div>      
+                  </div>
+                </div>
+            </div>
+            <!-- Main content end -->
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">Cửa Hàng Gà Rán</a>, All Right Reserved. 
+                        </div>
+                    </div>
+                </div>
+              </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- modal messages -->
+        {% if messages %}
+        <div id="messageModal" class="modal fade" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title text-center" id="messageModalLabel">Thông báo</h5>
+                </div>
+                <div class="modal-body text-center">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+        {% endif %}
+        <!-- modal messages -->        
+    </div>
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.js"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/admin_custom.js' %}"></script> 
+  <!-- Admin js --> 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editButtons = document.querySelectorAll('.edit-cttt');
+        const mahoadonInput = document.getElementById('edit-cttt-mahoadon');
+        const tinhtrangInput = document.getElementById('edit-cttt-tinhtrang');
+        const nhanvienInput = document.getElementById('edit-cttt-nhanvien');
+        const tgxacnhanInput = document.getElementById('edit-cttt-tgxacnhan');
+        const tgthanhtoanInput = document.getElementById('edit-cttt-tgthanhtoan');
+        const tgnhanhangInput = document.getElementById('edit-cttt-tgnhanhang');
+
+        function formatDate(dateString) {
+          const date = new Date(dateString);
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        }
+
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const mahoadon = this.getAttribute('data-item-id');
+                const tinhtrang = this.getAttribute('data-tinhtrang');
+                const nhanvien = this.getAttribute('data-nhanvien');
+                let tgxacnhan = this.getAttribute('data-tgxacnhan');
+                let tgthanhtoan = this.getAttribute('data-tgthanhtoan');
+                let tgnhanhang = this.getAttribute('data-tgnhanhang');
+    
+                mahoadonInput.value = mahoadon;
+                for (let i = 0; i < tinhtrangInput.options.length; i++) {
+                    if (tinhtrangInput.options[i].value == tinhtrang) {
+                        tinhtrangInput.options[i].selected = true;
+                        break;
+                    }
+                }
+                nhanvienInput.value = nhanvien;
+
+                tgxacnhan = tgxacnhan ? formatDate(tgxacnhan) : '';
+                tgthanhtoan = tgthanhtoan ? formatDate(tgthanhtoan) : '';
+                tgnhanhang = tgnhanhang ? formatDate(tgnhanhang) : '';
+
+                console.log(tgxacnhan)
+
+                tgxacnhanInput.value = tgxacnhan;
+                tgthanhtoanInput.value = tgthanhtoan;
+                tgnhanhangInput.value = tgnhanhang;
+            });
+        });
+
+        var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        if (messageModal) {
+            messageModal.show();
+        }
+    });
+  </script>
+      
+</body>
+
+</html>

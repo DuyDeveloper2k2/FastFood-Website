@@ -1,0 +1,366 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="">
+  
+    <title> Cửa Hàng Gà Rán </title>
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/admin_style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>QUẢN LÝ</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">{{ request.session.user_name }}</h6>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'Admin' %}" class="nav-item nav-link"><i class="fa fa-tachometer me-2"></i>Trang chủ</a>
+                    <a href="{% url 'AdminMonan' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Món ăn</a>
+                    <a href="{% url 'AdminCombo' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Combo</a>
+                    <a href="{% url 'AdminTinhtrang' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Đơn hàng</a>
+                    <a href="{% url 'AdminNguyenlieu' %}" class="nav-item nav-link"><i class="fa fa-tasks me-2"></i>Nguyên liệu</a>
+                    <a href="{% url 'AdminKhuyenmai' %}" class="nav-item nav-link active"><i class="fa fa-tasks me-2"></i>Khuyến mãi</a>
+                </div>
+                <div class="w-100 text-center mt-4">
+                    <a href="{% url 'AdminLogout' %}" class="btn btn-danger"><i class="fa fa-sign-out me-2"></i>Đăng xuất</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            <img class="rounded-circle me-lg-2" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">{{ request.session.user_name }}</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- Main content start -->
+            <div class="container-fluid pt-4 px-4">
+              <div class="row g-4">
+                <div class="col-12">
+                  <div class="bg-light rounded h-100 p-4">
+                    <!-- Lọc danh sách -->
+                    <div class="row mb-5">
+                      <div class="col-md-3">
+                          <form method="GET" action="{% url 'AdminKhuyenmai' %}">
+                            {% csrf_token %}
+                              <div class="input-group">
+                                  <select class="form-select" name="loaikhuyenmai">
+                                      <option value="">Tất cả các món ăn</option>
+                                      <option value="monan" {% if loai_khuyenmai == "monan" %}selected{% endif %}>Món ăn</option>
+                                      <option value="combo" {% if loai_khuyenmai == "combo" %}selected{% endif %}>Combo</option>
+                                  </select>
+                                  <button class="btn btn-primary" type="submit">Lọc</button>
+                              </div>
+                          </form>
+                      </div>
+                      <div class="col-md-9 d-flex justify-content-end">
+                        <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#ModalThemKhuyenmai">Thêm đợt khuyến mãi</button>
+                      </div>
+                    </div>
+                    <!-- Lọc danh sách -->
+
+                    <!-- Modal thêm đợt khuyến mãi -->
+                    <div class="modal fade" id="ModalThemKhuyenmai" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Thêm đợt khuyến mãi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="newKhuyenmai" method="post" action="{% url 'AdminKhuyenmai' %}">
+                                    {% csrf_token %}
+                                    <div class="container-fluid">
+                                        <div class="row mb-5">
+                                            <div class="col-md-4">
+                                                <label for="id_khuyenmai">Mã khuyến mãi</label>
+                                                <input type="text" class="form-control" id="id_khuyenmai" name="id_khuyenmai" value="{{makm}}" readonly>
+                                            </div>
+                                            <div class="col-md-6 ms-auto">
+                                                <label for="tenkhuyenmai">Tên khuyến mãi</label>
+                                                <input type="text" class="form-control" id="tenkhuyenmai" name="tenkhuyenmai">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-5">
+                                            <div class="col-md-4">
+                                                <label for="phantram">Giảm giá (%)</label>
+                                                <input type="number" class="form-control" id="phantram" name="phantram" min="5" max ="50">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="ngaytao">Ngày tạo</label>
+                                                <input type="date" class="form-control" id="ngaytao" name="ngaytao" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-5">
+                                            <div class="col-md-12">
+                                                <label for="mota">Mô tả</label>
+                                                <textarea class="form-control" id="mota" name="mota"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-5">
+                                            <div class="col-md-4">
+                                                <label for="ngaybd">Ngày bắt đầu</label>
+                                                <input type="date" class="form-control" id="ngaybd" name="ngaybd">
+                                            </div>
+                                            <div class="col-md-4 ms-auto">
+                                                <label for="ngaykt">Ngày kết thúc</label>
+                                                <input type="date" class="form-control" id="ngaykt" name="ngaykt">
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row mb-5">
+                                            <div class="col-md-12 table-container" >
+                                                <h4>Danh sách món ăn</h4>
+                                                <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Select</th>
+                                                                <th scope="col"  colspan="2">Món ăn</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for chitietphanan in Chitietphanans %}
+                                                                <tr>
+                                                                    <td><input type="checkbox" name="chitietphanan[]"value="monan_{{ chitietphanan.mactpa }}"></td>
+                                                                    <td colspan="2">{{ chitietphanan.tenmonan }} ({{ chitietphanan.kichco }})</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row mb-5">
+                                            <div class="col-md-12 table-container" >
+                                                <h4>Danh sách combo</h4>
+                                                <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Select</th>
+                                                                <th scope="col"  colspan="2">Món ăn</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for combo in Combos %}
+                                                                <tr>
+                                                                    <td><input type="checkbox" name="chitietphanan[]" value="combo_{{ combo.macombo }}"></td>
+                                                                    <td colspan="2">{{ combo.tencombo }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
+                                <button class="btn btn-success" id="addKhuyenmai">Thêm</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- Modal thêm đợt khuyến mãi -->
+
+                    <!-- Danh sách món ăn -->
+                    <h4 class="mb-5 text-center">Danh sách khuyến mãi</h4>
+                    <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th scope="col">Tên khuyến mãi</th>
+                                    <th scope="col">Mô tả</th>
+                                    <th scope="col">Sản phẩm</th>
+                                    <th scope="col">Khuyến mãi</th>
+                                    <th scope="col">Ngày tạo</th>
+                                    <th scope="col">Ngày bắt đầu</th>
+                                    <th scope="col">Ngày kết thúc</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              {% for item in Khuyenmais %}
+                                <tr>
+                                    <td>{{ item.tenkhuyenmai }}</td>
+                                    <td>{{ item.mota }}</td>
+                                    <td>{{ item.sanpham }}</td>
+                                    <td>{{ item.phantram }}%</td>
+                                    <td>{{ item.ngaytao|date:'d/m/Y' }}</td>
+                                    <td>{{ item.ngaybd|date:'d/m/Y' }}</td>
+                                    <td>{{ item.ngaykt|date:'d/m/Y' }}</td>
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Danh sách món ăn -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Main content end -->
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+              <div class="bg-light rounded-top p-4">
+                  <div class="row">
+                      <div class="col-12 col-sm-6 text-center text-sm-start">
+                          &copy; <a href="#">Cửa Hàng Gà Rán</a>, All Right Reserved. 
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- modal messages -->
+        {% if messages %}
+        <div id="messageModal" class="modal fade" tabindex="0" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title text-center" id="messageModalLabel">Thông báo</h5>
+                </div>
+                <div class="modal-body text-center">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+        {% endif %}
+        <!-- modal messages -->  
+    </div>
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.js"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/admin_custom.js' %}"></script>
+  <!-- Admin js -->
+  <script>
+    function toggleInputFields() {
+        var selectedValue = document.getElementById("id_maloai").value;
+        var monanField = document.getElementById("monan-field");
+        var comboField = document.getElementById("combo-field");
+
+        if (selectedValue === "monan") {
+            monanField.style.display = "block";
+            comboField.style.display = "none";
+        } else if (selectedValue === "combo") {
+            monanField.style.display = "none";
+            comboField.style.display = "block";
+        } else {
+            monanField.style.display = "none";
+            comboField.style.display = "none";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('ngaytao').value = today;
+        document.getElementById('ngaybd').value = today;
+        document.getElementById('ngaykt').value = today;
+    });
+
+    document.getElementById('phantram').addEventListener('blur', function() {
+        let value = parseInt(this.value);
+        if (value < 5) {
+            this.value = 5;
+        } else if (value > 50) {
+            this.value = 50;
+        }
+    });
+
+    // Initial call to set the correct fields on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleInputFields();
+    });
+
+    document.getElementById('addKhuyenmai').addEventListener('click', function() {
+        document.getElementById('newKhuyenmai').submit();
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        if (messageModal) {
+            messageModal.show();
+        }
+    });
+  </script>
+</body>
+
+</html>

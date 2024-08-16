@@ -1,0 +1,570 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="">
+  
+    <title> Cửa Hàng Gà Rán </title>
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+</head>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="{% static 'images/bg-header.jpg' %}" alt="">
+    </div>
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{% url 'Home' %}">
+            <span>
+              Cửa Hàng Gà Rán
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Home' %}">TRANG CHỦ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Menu' %}">THỰC ĐƠN</a>
+              </li>
+            </ul>
+            <div class="user_option mx-auto">
+              {% if request.session.khachhang_id %}
+                <a href="{% url 'Profile' %}" class="user_link">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  {{ request.session.khachhang_name }}
+                </a>
+              {% else %}
+                <a href="{% url 'Login' %}" class="user_link">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                </a>
+              {% endif %}
+
+              {% if request.session.total_quantity %}
+              <a href="{% url 'Shoppingcart' %}">
+                <i class="fa fa-shopping-cart fa-md" style="color: white"></i>
+                <span class="badge rounded-pill badge-notification bg-danger">{{ request.session.total_quantity }}</span>
+              </a>
+              {% else %}
+              <a href="{% url 'Shoppingcart' %}">
+                <i class="fa fa-shopping-cart fa-md" style="color: white"></i>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <!-- cart section -->
+  <section class="h-100 gradient-custom">
+    <div class="container py-5">
+      <div class="row d-flex justify-content-center my-4">
+        <div class="col-md-8">
+          <div class="card mb-4">
+            <div class="card-header py-3">
+              <h5 class="mb-0">Giỏ hàng</h5>
+            </div>
+            <div class="card-body">
+              {% for item_id, item in cart.items %}
+              <!-- Single item -->
+              <div class="row">
+                <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                  <!-- Image -->
+                  <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                    <img src="data:image/jpeg;base64,{{ item.image }}" alt="{{ item.name }}"
+                      class="w-100" alt="g2" />
+                    <a href="#!">
+                      <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                    </a>
+                  </div>
+                  <!-- Image -->
+                </div>
+  
+                <div class="col-lg-6 col-md-6 mb-4 mb-lg-0">
+                  {% if 'sale' in item %}
+                    <!-- Data -->
+                    <p><strong>{{item.name}} <b class="text-danger fst-italic">{{item.sale}}%</b></strong></p>
+                    <br />
+                    <!-- Price -->  
+                    <p class="text-start">
+                      <strong><s>{{item.price}}</s> &nbsp; <b class="text-danger">{{item.saleprice}} VNĐ</b></strong>
+                    </p>
+                    <!-- Price -->
+                  {% else %}
+                    <!-- Data -->
+                    <p><strong>{{item.name}}</strong></p>
+                    <br />
+                    <!-- Price -->
+                    <p class="text-start">
+                      <strong>{{item.price}} VNĐ</strong>
+                    </p>
+                    <!-- Price -->
+                  {% endif %}
+                  <hr />
+                  {% if 'size' in item %}
+                    {% if item.size %}
+                      <p>Kích cỡ: {{item.size}}</p>
+                    {% else %}
+                      <p></p>
+                    {% endif %}
+                  {% elif 'detail' in item %}
+                    <div class="table-responsive">
+                      <table class="table custom-table mb-5">
+                        <tbody>
+                            {% for item_detail in item.detail %}
+                                <tr>
+                                  <td> <i class="fa fa-arrow-circle-right"> </td>
+                                  <td> {{item_detail.tenmonan}} </td>
+                                  <td> {{item_detail.soluong}}</td>
+                                  {% if item_detail.kichco is None %}
+                                    <td></td>
+                                  {% else %}
+                                    <td>{{item_detail.kichco}}</td>
+                                  {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  {% endif %}
+                  <form method="post" action="{% url 'CapNhatGioHang' item_id %}">
+                    {% csrf_token %}
+                    <button type="submit" name="action" value="delete" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-tooltip-init title="Remove item">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                  </form>
+                  <!-- Data -->
+                </div>
+  
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                  <!-- Quantity -->
+                  <div class="d-flex mb-4" style="max-width: 300px">
+                    <form method="POST" action="{% url 'CapNhatGioHang' item_id %}">
+                      {% csrf_token %}
+                      <div class="d-flex mb-4" style="max-width: 300px">
+                          <button class="btn btn-primary px-3 me-2" type="submit" name="action" value="decrease">
+                              <i class="fa fa-minus"></i>
+                          </button>
+
+                          <input id="form1" min="0" name="quantity" value="{{ item.quantity }}" type="number"
+                              class="form-control" />
+
+                          <button class="btn btn-primary px-3 ms-2" type="submit" name="action" value="increase">
+                              <i class="fa fa-plus"></i>
+                          </button>
+                      </div>
+                  </form>
+                  </div>
+                  <!-- Quantity -->
+                </div>
+              </div>
+              <!-- Single item -->
+              <hr />
+              {% endfor %}
+            </div>
+          </div>
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body">
+              <p><strong>Chấp nhận thanh toán bằng</strong></p>
+              <img class="me-2" width="45px"
+                src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+                alt="Visa" />
+              <img class="me-2" width="45px"
+                src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+                alt="Mastercard" />
+              <img class="me-2" width="45px"
+                src="{% static 'images/VNPay.svg' %}"
+                alt="VNPay" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-header py-3">
+              <h5 class="mb-0">Tổng giỏ hàng</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                  Tổng giá trị sản phẩm:
+                  <span>{{total}} VNĐ</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  Phí vận chuyển:
+                  <span>Miễn phí</span>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                  <div>
+                    <strong>Tổng giá trị đơn hàng</strong>
+                  </div>
+                  <span><strong>{{total}} VNĐ</strong></span>
+                </li>
+              </ul>
+              <button type="button" class="btn btn-primary btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#ModalThanhToan">Thanh toán</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end cart section -->
+
+  <!-- Modal thanh toán -->
+  {% if khachhang %}
+  <div class="modal fade" id="ModalThanhToan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title" id="staticBackdropLabel">THANH TOÁN</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="radio" value="Money" name="thanhtoan" id="paymentMoney">
+                    <label for="id_tienmat">&nbsp;Thanh toán khi nhận hàng</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="radio" value="Bank" name="thanhtoan" id="paymentBank">
+                    <label for="id_tienonline">&nbsp;Thanh toán trực tuyến</label>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div id="paymentMoneyField" style="display: none;">
+                <form id="ThanhtoanCash" method="POST">
+                {% csrf_token %}
+                <div class="row mb-2">
+                  <div class="col-md-6">
+                    <label for="name" class="form-label">Họ tên</label>
+                    <input type="text" class="form-control" id="name" value="{{khachhang.tenkhachhang}}" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="date" class="form-label">Ngày thanh toán</label>
+                    <input type="date" class="form-control" id="date" readonly>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-md-6">
+                    <label for="phone" class="form-label">Số điện thoại</label>
+                    <input type="text" class="form-control" id="phone"  value="{{khachhang.sodienthoai}}" readonly>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-md-4">
+                    <label for="cartTotal" class="form-label">Tổng tiền</label>
+                    <input type="number" class="form-control" id="cartTotal" value="{{total}}" readonly>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-md-12">
+                    <label for="address" class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" value="{{khachhang.diachi}}" readonly>
+                  </div>
+                </div>
+                </form>
+              </div>
+              <div id="paymentBankField" style="display: none;">
+                <form id="ThanhtoanOnline" method="POST">
+                  {% csrf_token %}
+                  <div class="row mb-2">
+                    <div class="col-md-6">
+                      <label for="name" class="form-label">Họ tên</label>
+                      <input type="text" class="form-control" id="name" value="{{khachhang.tenkhachhang}}" readonly>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="date" class="form-label">Ngày thanh toán</label>
+                      <input type="date" class="form-control" id="date" readonly>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-md-6">
+                      <label for="phone" class="form-label">Số điện thoại</label>
+                      <input type="text" class="form-control" id="phone" value="{{khachhang.sodienthoai}}" readonly>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-md-12">
+                      <label for="address" class="form-label">Địa chỉ</label>
+                      <input type="text" class="form-control" id="address" value="{{khachhang.diachi}}" readonly>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-md-4">
+                      <label for="cartTotal" class="form-label">Tổng tiền</label>
+                      <input type="number" class="form-control" name="cartTotal" id="cartTotal" value="{{total}}" readonly>
+                    </div>
+                  </div>
+                  <div class="row mb-5">
+                    <div class="col-md-4 input-group">
+                      <label for="bank_code" class="form-label">Ngân hàng</label>
+                      <div class="input-group-append">
+                        <select name="bank_code" id="bank_code" class="form-control">
+                          <option value="">Không chọn</option>
+                          <option value="NCB"> Ngan hang NCB</option>
+                          <option value="AGRIBANK"> Ngan hang Agribank</option>
+                          <option value="SCB"> Ngan hang SCB</option>
+                          <option value="SACOMBANK">Ngan hang SacomBank</option>
+                          <option value="EXIMBANK"> Ngan hang EximBank</option>
+                          <option value="MSBANK"> Ngan hang MSBANK</option>
+                          <option value="NAMABANK"> Ngan hang NamABank</option>
+                          <option value="VNMART"> Vi dien tu VnMart</option>
+                          <option value="VIETINBANK">Ngan hang Vietinbank</option>
+                          <option value="VIETCOMBANK"> Ngan hang VCB</option>
+                          <option value="HDBANK">Ngan hang HDBank</option>
+                          <option value="DONGABANK"> Ngan hang Dong A</option>
+                          <option value="TPBANK"> Ngân hàng TPBank</option>
+                          <option value="OJB"> Ngân hàng OceanBank</option>
+                          <option value="BIDV"> Ngân hàng BIDV</option>
+                          <option value="TECHCOMBANK"> Ngân hàng Techcombank</option>
+                          <option value="VPBANK"> Ngan hang VPBank</option>
+                          <option value="MBBANK"> Ngan hang MBBank</option>
+                          <option value="ACB"> Ngan hang ACB</option>
+                          <option value="OCB"> Ngan hang OCB</option>
+                          <option value="IVB"> Ngan hang IVB</option>
+                          <option value="VISA"> Thanh toan qua VISA/MASTER</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay trở lại</button>
+            <button type="button" class="btn btn-success" id="submitButton">Thanh toán</button>
+          </div>
+        </div>
+      </div>
+  </div>
+  {% else %}
+  <div class="modal fade" id="ModalThanhToan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="staticBackdropLabel">THANH TOÁN</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <h6>Khách hàng cần đăng nhập để thanh toán</h6>
+              </div>
+            </div>
+          </div>  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay trở lại</button>
+          <form action="{% url 'Login' %}" method="get" style="display: inline;">
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <!-- Modal thanh toán -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 footer-col">
+          <div class="footer_contact">
+            <h4>
+              Liên hệ
+            </h4>
+            <div class="contact_link_box">
+              <a href="">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <span>
+                  140 Lê Trọng Tấn, Phường Tây Thạnh, Quận Tân Phú, TP.HCM
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span>
+                  Call +01 1234567890
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>
+                  demo@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <div class="footer_detail">
+            <a href="" class="footer-logo">
+              Cửa Hàng Gà Rán
+            </a>
+            <p>
+              Cửa Hàng Gà Rán, thức ăn nhanh tại Việt Nam 
+            </p>
+            <div class="footer_social">
+              <a href="">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-pinterest" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <h4>
+            Giờ mở cửa
+          </h4>
+          <p>
+            Mỗi Ngày
+          </p>
+          <p>
+            7:00 - 22:00
+          </p>
+        </div>
+      </div>
+      <div class="footer-info">
+        <p>
+          &copy; <span id="displayYear"></span> All Rights Reserved By<br><br>
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <style>
+    .custom-table,
+    .custom-table th,
+    .custom-table td {
+      border: none !important;
+    }
+  </style>
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <!-- MDB js -->
+  <script src="{% static 'js/mdb.es.min.js' %}"></script>
+  <script src="{% static 'js/mdb.umd.min.js' %}"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/custom.js' %}"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const paymentMoney = document.getElementById('paymentMoney');
+      const paymentBank = document.getElementById('paymentBank');
+      const submitButton = document.getElementById('submitButton');
+      const paymentMoneyField = document.getElementById('paymentMoneyField');
+      const paymentBankField = document.getElementById('paymentBankField');
+      const currentDate = new Date().toISOString().split('T')[0];
+
+      const dateFields = document.querySelectorAll('[id^="date"]');
+      dateFields.forEach(field => field.value = currentDate);
+      
+      const formOnline = document.getElementById('ThanhtoanOnline');
+      const formCash = document.getElementById('ThanhtoanCash')
+
+      paymentMoney.addEventListener('change', function() {
+        if (this.checked) {
+          paymentMoneyField.style.display = 'block';
+          paymentBankField.style.display = 'none';
+        }
+      });
+
+      paymentBank.addEventListener('change', function() {
+        if (this.checked) {
+          paymentMoneyField.style.display = 'none';
+          paymentBankField.style.display = 'block';
+        }
+      });
+
+      submitButton.addEventListener('click', function() {
+        if (paymentMoney.checked) {
+          formCash.action = "{% url 'PaymentCash' %}";
+          formCash.method = 'POST';
+            // Enable readonly fields just before submission
+          document.getElementById('name').removeAttribute('readonly');
+          document.getElementById('phone').removeAttribute('readonly');
+          document.getElementById('address').removeAttribute('readonly');
+          document.getElementById('cartTotal').removeAttribute('readonly');
+          formCash.submit();
+        } else if (paymentBank.checked) {
+          formOnline.action = "{% url 'PaymentOnline' %}";
+          formOnline.method = 'POST';
+          formOnline.submit();
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,373 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="">
+  
+    <title> Cửa Hàng Gà Rán </title>
+  
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+    <!-- font awesome style -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+    
+
+</head>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="{% static 'images/bg-header.jpg' %}" alt="">
+    </div>
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{% url 'Home' %}">
+            <span>
+              Cửa Hàng Gà Rán
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Home' %}">TRANG CHỦ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Menu' %}">THỰC ĐƠN</a>
+              </li>
+            </ul>
+            <div class="user_option mx-auto">
+              {% if request.session.khachhang_id %}
+                <a href="{% url 'Profile' %}" class="user_link">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  {{ request.session.khachhang_name }}
+                </a>
+              {% else %}
+                <a href="{% url 'Login' %}" class="user_link">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                </a>
+              {% endif %}
+
+              {% if request.session.total_quantity %}
+              <a href="{% url 'Shoppingcart' %}">
+                <i class="fa fa-shopping-cart fa-md" style="color: white"></i>
+                <span class="badge rounded-pill badge-notification bg-danger">{{ request.session.total_quantity }}</span>
+              </a>
+              {% else %}
+              <a href="{% url 'Shoppingcart' %}">
+                <i class="fa fa-shopping-cart fa-md" style="color: white"></i>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+
+    <!-- modal messages -->
+    {% if messages %}
+    <div id="messageModal" class="modal fade" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title text-center" id="messageModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body text-center">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endif %}
+    <!-- modal messages -->    
+  </div>
+
+  <!-- profile section -->
+  <section class="vh-100">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-10 mb-4 mb-lg-0">
+          <div class="card mb-3" style="border-radius: .5rem; background-color: #2C2C2C;">
+            <div class="row g-0">
+              <!-- Các chức năng -->
+              <div class="col-md-4 gradient-custom text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
+                <h5>{{ khachhang.tenkhachhang }}</h5>
+                <div class="justify-content-around align-items-center">
+                  <button type="button" class="btn btn-link" style="background: none; border: none;" data-bs-toggle="modal" data-bs-target="#ModalEditProfile">
+                    <i class="fa fa-edit fa-lg" style="color: white;"></i>
+                  </button>
+                  <button type="button" class="btn btn-link" style="background: none; border: none;" onclick="window.location.href='{% url 'History' %}'">
+                    <i class="fa fa-archive fa-lg" style="color: white;"></i>
+                  </button>
+                  <button type="button" class="btn btn-link" style="background: none; border: none;" onclick="window.location.href='{% url 'Logout' %}'">
+                    <i class="fa fa-sign-out fa-lg" style="color: red;"></i>
+                  </button>
+                </div>                
+              </div>
+              <!-- Các chức năng -->
+
+              <!-- Thông tin người dùng -->
+              <div class="col-md-8 text-white">
+                <div class="card-body p-4">
+                  <h6>Thông tin người dùng</h6>
+                  <hr class="mt-0 mb-4">
+                  <div class="row pt-1">
+                    <div class="col-6 mb-3">
+                      <h6>Email</h6>
+                      <p class="text-muted" id="email-display">{{ khachhang.email }}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                      <h6>Số điện thoại</h6>
+                      <p class="text-muted" id="sodienthoai-display">{{ khachhang.sodienthoai }}</p>
+                    </div>
+                  </div>
+                  <h6>Thông tin cá nhân</h6>
+                  <hr class="mt-0 mb-4">
+                  <div class="row pt-1">
+                    <div class="col-6 mb-3">
+                      <h6>Ngày sinh</h6>
+                      <p class="text-muted" id="ngaysinh-display">{{ khachhang.ngaysinh|date:"d/m/Y" }}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                      <h6>Giới tính</h6>
+                      <p class="text-muted" id="gioitinh-display">{{ khachhang.gioitinh }}</p>
+                    </div>
+                    <div class="col-12 mb-3">
+                      <h6>CCCD</h6>
+                      <p class="text-muted" id="cccd-display">{{ khachhang.cccd }}</p>
+                    </div>
+                    <div class="col-12 mb-3">
+                      <h6>Địa chỉ</h6>
+                      <p class="text-muted" id="diachi-display">{{ khachhang.diachi }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Thông tin người dùng -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end profile section -->
+
+  <!-- edit profile -->
+  <div class="modal fade" id="ModalEditProfile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editProfileModalLabel">Chỉnh sửa thông tin cá nhân</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <form id="editProfile" method="POST" action="{% url 'EditProfile' khachhang.makhachhang %}">
+              {% csrf_token %}
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="name">Tên người dùng:</label>
+                  <input type="text" class="form-control" id="name" name="tenkhachhang" value="{{ khachhang.tenkhachhang }}">
+                </div>
+                <div class="col-md-6">
+                  <label for="cccd">CCCD:</label>
+                  <input type="text" class="form-control" id="cccd" name="cccd" value="{{ khachhang.cccd }}">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="email">Email:</label>
+                  <input type="email" class="form-control" id="email" name="email" value="{{ khachhang.email }}"> 
+                </div>
+                <div class="col-md-6">
+                  <label for="sodienthoai">Số điện thoại:</label>
+                  <input type="text" class="form-control" id="sodienthoai" name="sodienthoai" value="{{ khachhang.sodienthoai }}">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label>Giới tính: </label>
+                  <div class="row mb-2">
+                    <div class="col-8 col-sm-3">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="GtNu"
+                          value="Nữ" checked name="gioitinh"/>
+                        <label class="form-check-label" for="GtNu">Nữ</label>
+                      </div>
+                    </div>
+                    <div class="col-8 col-sm-3">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="GtNam"
+                          value="Nam" name="gioitinh"/>
+                        <label class="form-check-label" for="GtNam">Nam</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label for="ngaysinh">Ngày sinh:</label>
+                  <input type="date" class="form-control" id="ngaysinh" name="ngaysinh" value="{{ khachhang.ngaysinh|date:'Y-m-d' }}"/>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <label for="diachi">Địa chỉ:</label>
+                  <input type="text" class="form-control" id="diachi" name="diachi" value="{{ khachhang.diachi }}">
+                </div>
+              </div>
+          </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay trở lại</button>
+          <button type="button" class="btn btn-success" id="submitButton">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- edit profile -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 footer-col">
+          <div class="footer_contact">
+            <h4>
+              Liên hệ
+            </h4>
+            <div class="contact_link_box">
+              <a href="">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <span>
+                  140 Lê Trọng Tấn, Phường Tây Thạnh, Quận Tân Phú, TP.HCM
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span>
+                  Call +01 1234567890
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>
+                  demo@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <div class="footer_detail">
+            <a href="" class="footer-logo">
+              Cửa Hàng Gà Rán
+            </a>
+            <p>
+              Cửa Hàng Gà Rán, thức ăn nhanh tại Việt Nam 
+            </p>
+            <div class="footer_social">
+              <a href="">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-pinterest" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <h4>
+            Giờ mở cửa
+          </h4>
+          <p>
+            Mỗi Ngày
+          </p>
+          <p>
+            7:00 - 22:00
+          </p>
+        </div>
+      </div>
+      <div class="footer-info">
+        <p>
+          &copy; <span id="displayYear"></span> All Rights Reserved By<br><br>
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.js"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/custom.js' %}"></script>
+  <script>
+    document.getElementById('submitButton').addEventListener('click', function() {
+      document.getElementById('editProfile').submit();
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        if (messageModal) {
+            messageModal.show();
+        }
+    });
+  </script>
+
+</body>
+</html>
